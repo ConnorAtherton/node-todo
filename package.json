@@ -1,14 +1,27 @@
 {
-  "name": "node-todo",
+  "name": "gen-todos",
   "version": "0.0.1",
-  "description": "",
-  "main": "todo.js",
+  "description": "Generate helpful todos from a projects source.",
+  "main": "src/todo.js",
   "scripts": {
+    "prepublish": "npm prune",
     "test": "mocha"
+  },
+  "homepage": "https://github.com/ConnorAtherton/node-todo",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ConnorAtherton/node-todo.git"
+  },
+  "bin": {
+    "todo": "./bin/todo.js"
   },
   "keywords": [
     "todo"
   ],
   "author": "Connor Atherton",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "split": "~0.3.0",
+    "chalk": "~0.5.1"
+  }
 }
