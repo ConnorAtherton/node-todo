@@ -1,0 +1,14 @@
+{
+  "name": "node-todo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "todo.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "Connor Atherton",
+  "license": "MIT"
+}
