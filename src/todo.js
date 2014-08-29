@@ -61,7 +61,7 @@ function scan(file, header) {
     .pipe(split())
     .on('data', function(line) {
       line = line.toString();
-      if (/\s*\/\/\s*TODO.*/.test(line)) {
+      if (/\s*\/\/\s*(TODO|FIXME).*/.test(line)) {
         if (!outputStarted) {
           output.write('#TODOS\n');
           outputStarted = true;
@@ -72,8 +72,8 @@ function scan(file, header) {
         } else {
           filesWritten.push(header);
         }
-        // TODO Should this be hardcoded?
-        output.write(format(line.replace(/\s*\/\/\s*TODO/, ''), header));
+        // FIXME Should this be hardcoded?
+        output.write(format(line.replace(/\s*\/\/\s*(TODO|FIXME)/, ''), header));
       };
     });
 }
