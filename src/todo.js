@@ -1,4 +1,6 @@
 // TODO Write full docs for this file
+// TODO Strip gitignore folders so node_modules/**/* works. Tranform node_modules/**/* to just node_modules
+// TODO Throw an error message when no .gitignore is present
 var path = require("path");
 var fs = require("fs");
 var split = require("split");
