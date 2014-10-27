@@ -1,4 +1,3 @@
-// TODO Write full docs for this file
 // TODO Strip gitignore folders so node_modules/**/* works. Tranform node_modules/**/* to just node_modules
 // TODO Throw an error message when no .gitignore is present
 var path = require("path");
@@ -11,10 +10,13 @@ var filesWritten = [];
 var output = fs.createWriteStream('todo.md');
 var outputStarted = false;
 
-//
-//
-//
-//
+/* Walks all child directories looking for files to scan starting from
+ * a root directory.
+ *
+ * @param {dir} string - Root dir to start the search from.
+ * @param {function} cb - Function to be called once traversing
+ *                        is finished.
+ */
 function walk(dir, cb) {
   var remaining = 1;
   var rootDir = process.cwd() + (dir || '');
@@ -47,17 +49,21 @@ function walk(dir, cb) {
     });
   })(rootDir)
 
-  //
-  // This deals with the case where we read
-  // an empty dir last
-  //
+  /*
+   * This deals with the case where we read
+   * an empty dir last.
+   */
   if (!remaining) cb();
 
 }
 
-//
-//
-//
+
+/* Scans a file for todos and writes any lines to todos.md.
+ *
+ * @param {file} string - File to scan for todos
+ * @param {header} string - A message written as a header
+ *                          for each file in todo.md
+ */
 function scan(file, header) {
   fs.createReadStream(file)
     .pipe(split())
@@ -80,32 +86,45 @@ function scan(file, header) {
     });
 }
 
-//
-//
-//
+/* Constructs a string to be placed into todos.md.
+ * If it is the first todo occurence we prepend a header containing the file name.
+ *
+ * @param {line} string - Current line *todo* was located on
+ * @param {header} string|undefined - The header string if it is the first todo
+ *                                    occurence in the file, undefined otherwise.
+ * @returns {string} The header to be displayed in todos.md
+ */
 function format(line, header) {
   var header = header ? '\n##' + header + '\n' : header;
   var line = '-' + line + '\n';
   return header ? header + line : line;
 }
 
-//
-//
-//
+/* Returns true if a file should be scanned for todos. Currently no hidden files
+ * or directories or files in .gitignore will be counted.
+ *
+ * @param {string} file
+ * @returns {boolean}
+ */
 function shouldContinue(file) {
   return !contains(ignoreList, file) && !isHidden(file);
 }
 
-//
-//
-//
+/* Checks if a primitive is contained within an array.
+ *
+ * @param {array} array
+ * @param {el} string|number
+ * @returns {boolean}
+ */
 function contains(array, el) {
   return array.indexOf(el) !== -1;
 }
 
-//
-//
-//TODO this is a todo
+/* Checks to see if a file is hidden
+ *
+ * @param {file} string - Name of the file to check
+ * @returns {boolean}
+ */
 function isHidden(file) {
   return file.substring(0, 1) === '.';
 }
