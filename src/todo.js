@@ -1,14 +1,15 @@
-// TODO Strip gitignore folders so node_modules/**/* works. Tranform node_modules/**/* to just node_modules
 // TODO Throw an error message when no .gitignore is present
 var path = require("path");
 var fs = require("fs");
 var split = require("split");
+var chalk = require('chalk');
 
 var ignoreList = fs.readFileSync('.gitignore').toString().split('\n');
-var filesWritten = [];
-// TODO Put regexs at the top into a variable for when they become complex
 var output = fs.createWriteStream('todo.md');
 var outputStarted = false;
+var commentSyntax = /\s*(\/\/|\/\*|\*|#)\s(TODO|FIXME).*/i;
+var commentMatch = /\s*(\/\/|\/\*|\*|#)\s(TODO|FIXME)/i;
+var filesWritten = [];
 
 /* Walks all child directories looking for files to scan starting from
  * a root directory.
@@ -69,7 +70,8 @@ function scan(file, header) {
     .pipe(split())
     .on('data', function(line) {
       line = line.toString();
-      if (/\s*\/\/\s*(TODO|FIXME).*/.test(line)) {
+
+      if (commentSyntax.test(line)) {
         if (!outputStarted) {
           output.write('#TODOS\n');
           outputStarted = true;
@@ -80,8 +82,8 @@ function scan(file, header) {
         } else {
           filesWritten.push(header);
         }
-        // FIXME Should this be hardcoded?
-        output.write(format(line.replace(/\s*\/\/\s*(TODO|FIXME)/, ''), header));
+
+        output.write(format(line.replace(commentMatch, ''), header));
       };
     });
 }
@@ -129,5 +131,40 @@ function isHidden(file) {
   return file.substring(0, 1) === '.';
 }
 
-module.exports = walk;
+/* Map each value in the list to a single string
+ *
+ * e.g  node_modules/* -> node_modules
+ *
+ * @param {Array} list - The list containing globs to be formatted
+ */
+
+function formatIgnoreList(list) {
+  return list.map(function(entry) {
+    var splitIndex = entry.indexOf('/');
+
+    var value = splitIndex !== -1 ? entry.slice(0, splitIndex) : entry;
+    return value.trim();
+  });
+}
+
+/* This is the main entrypoint, it collects and correctly formats
+ * the ignore globs and starts the traversal down starting from the
+ * current directory.
+ *
+ * @param {Object} argv - all command line arguments passed in.
+ */
+function init(argv) {
+  // append to ignore list for the ignore flag
+  ignores = argv.ignore ? argv.ignore.split(',') : undefined;
+  if (ignores) ignoreList = ignoreList.concat(ignores);
+
+  ignoreList = formatIgnoreList(ignoreList);
+
+  walk(null, function(err) {
+    if (err) console.log(chalk.red(err));
+    console.log(chalk.yellow('\n  Your todos are in todo.md\n'));
+  });
+}
+
+module.exports = init;
 

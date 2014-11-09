@@ -1,10 +1,28 @@
 #TODOS
 
-##test/test.js
-- Add tests!
+##README.md
+- example todo
+- example todo
+- .coffee .rb comments
+- example todo
+- example todo
+- example todo
+- example todo
+- another todo
+- pretty please
 
 ##src/todo.js
-- Strip gitignore folders so node_modules/**/* works. Tranform node_modules/**/* to just node_modules
 - Throw an error message when no .gitignore is present
-- Put regexs at the top into a variable for when they become complex
-- Should this be hardcoded?
+- Check case works
+
+##test/fixture/dir/todo.js
+- Second todo.
+
+##test/fixture/should_ignore/todo.md
+- Should ignore this.
+
+##test/fixture/dir/child_dir/todo.js
+- Third todo.
+- Fourth todo
+- Fifth todo
+- Fifth todo
