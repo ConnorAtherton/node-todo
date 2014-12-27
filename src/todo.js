@@ -33,12 +33,12 @@ function walk(dir, cb) {
         var absPath = path.resolve(dir, file);
         var header = path.relative(rootDir, absPath);
 
-        fs.stat(absPath, function(err, stat) {
+        fs.lstat(absPath, function(err, stat) {
           if (err) return cb(err);
 
           if (stat) {
             if (stat.isDirectory()) {
-              return shouldContinue(file) ? traverse(absPath) : --remaining;
+              return shouldContinue(file) && !stat.isSymbolicLink() ? traverse(absPath) : --remaining;
             } else {
               if (shouldContinue(file)) scan(absPath, header);
               --remaining;

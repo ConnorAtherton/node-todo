@@ -1,6 +1,6 @@
 {
   "name": "gen-todos",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Generate helpful todos from a projects source.",
   "main": "src/todo.js",
   "scripts": {
