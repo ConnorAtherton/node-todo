@@ -1,6 +1,6 @@
 {
   "name": "gen-todos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate helpful todos from a projects source.",
   "main": "src/todo.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "author": "Connor Atherton",
   "license": "MIT",
   "dependencies": {
-    "chalk": "~0.5.1",
+    "headway": "0.0.2",
     "minimist": "^1.1.0",
     "split": "~0.3.0"
   }

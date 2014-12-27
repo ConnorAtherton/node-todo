@@ -2,7 +2,7 @@
 var path = require("path");
 var fs = require("fs");
 var split = require("split");
-var chalk = require('chalk');
+var hw = require('headway');
 
 var ignoreList = fs.readFileSync('.gitignore').toString().split('\n');
 var output = fs.createWriteStream('todo.md');
@@ -161,8 +161,8 @@ function init(argv) {
   ignoreList = formatIgnoreList(ignoreList);
 
   walk(null, function(err) {
-    if (err) console.log(chalk.red(err));
-    console.log(chalk.yellow('\n  Your todos are in todo.md\n'));
+    if (err) hw.log('{red}' + err);
+    hw.log('\n {yellow}Your todos are in todo.md\n');
   });
 }
 
