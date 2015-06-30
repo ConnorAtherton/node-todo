@@ -1,15 +1,30 @@
-// TODO Throw an error message when no .gitignore is present
 var path = require("path");
 var fs = require("fs");
 var split = require("split");
 var hw = require('headway');
 
-var ignoreList = fs.readFileSync('.gitignore').toString().split('\n');
+var ignoreList;
 var output = fs.createWriteStream('todo.md');
 var outputStarted = false;
-var commentSyntax = /\s*(\/\/|\/\*|\*|#)\s(TODO|FIXME).*/i;
-var commentMatch = /\s*(\/\/|\/\*|\*|#)\s(TODO|FIXME)/i;
 var filesWritten = [];
+
+// TODO: include the line number of the todo
+// TODO: check if output is empty and add message
+
+/**
+ * Main patterns
+ */
+var commentSyntax = /\s*(\/\/|\/\*|\*|#)\s(TODO|FIXME):?.*/i;
+var commentMatch = /\s*(\/\/|\/\*|\*|#)\s(TODO|FIXME):?/i;
+
+/**
+ * Try and load the gitignore
+ */
+try {
+  ignoreList = fs.readFileSync('.gitignore').toString().split('\n');
+} catch(e) {
+  ignoreList = [];
+}
 
 /* Walks all child directories looking for files to scan starting from
  * a root directory.
@@ -112,7 +127,7 @@ function shouldContinue(file) {
   return !contains(ignoreList, file) && !isHidden(file);
 }
 
-/* Checks if a primitive is contained within an array.
+/* Checks if a value is contained within an array.
  *
  * @param {array} array
  * @param {el} string|number
@@ -162,7 +177,7 @@ function init(argv) {
 
   walk(null, function(err) {
     if (err) hw.log('{red}' + err);
-    hw.log('\n {yellow}Your todos are in todo.md\n');
+    hw.log('\n{yellow}Your todos are in todo.md\n\n');
   });
 }
 
